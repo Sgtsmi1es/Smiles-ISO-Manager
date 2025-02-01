@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<Container>
+  <Name>ISO Organizer</Name>
+  <Repository>sgtsmi1es/iso-organizer:latest</Repository>
+  <Registry>https://hub.docker.com/r/sgtsmi1es/iso-organizer</Registry>
+  <Network>bridge</Network>
+  <MyID>iso-organizer</MyID>
+  <Icon>https://raw.githubusercontent.com/Sgtsmi1es/iso-organizer/main/icon.png</Icon>
+  <WebUI>http://[IP]:[PORT:1337]</WebUI>
+  <TemplateURL>https://raw.githubusercontent.com/Sgtsmi1es/iso-organizer/main/iso-organizer.xml</TemplateURL>
+
+  <Config>
+    <Variable>
+      <Name>ISO_DIR</Name>
+      <Key>ISO_DIR</Key>
+      <Value>/mnt/user/isos</Value>
+      <Description>Path to the ISO share on Unraid</Description>
+      <Type>Path</Type>
+    </Variable>
+    <Variable>
+      <Name>PORT</Name>
+      <Key>PORT</Key>
+      <Value>1337</Value>
+      <Description>Web UI Port</Description>
+      <Type>Port</Type>
+    </Variable>
+  </Config>
+
+  <Data>
+    <Path>
+      <HostDir>/mnt/user/isos</HostDir>
+      <ContainerDir>/mnt/user/isos</ContainerDir>
+      <Mode>rw</Mode>
+    </Path>
+    <Port>
+      <HostPort>1337</HostPort>
+      <ContainerPort>1337</ContainerPort>
+      <Protocol>tcp</Protocol>
+    </Port>
+  </Data>
+</Container>
