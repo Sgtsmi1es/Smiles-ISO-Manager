@@ -17,9 +17,6 @@ OS_FOLDERS = {
     "Virtio": ["virtio", "vm_drivers"]
 }
 
-# Initialize Flask app
-app = Flask(__name__)
-
 # HTML template for the web portal
 HTML_TEMPLATE = """
 <!doctype html>
