@@ -2,6 +2,7 @@ import os
 import shutil
 from datetime import datetime
 from flask import Flask, render_template_string, redirect, url_for
+app = Flask(__name__)
 
 # Environment variables
 ISO_DIR = os.getenv("ISO_DIR", "/mnt/user/isos")
