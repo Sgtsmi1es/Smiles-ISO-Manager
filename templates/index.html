@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISO Organizer Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>ISO Organizer Dashboard</h1>
+
+    <div class="os-section" onclick="toggleDetails('windows')">
+        <h2>Windows <span class="flag status-ok">🟢 Up-to-Date</span></h2>
+        <button class="btn-check-updates" onclick="checkUpdates(event, 'windows')">Check for Updates</button>
+        <div id="windows" class="iso-details">
+            <p>Win10_1909.iso - ✅ Verified</p>
+            <p>Win11_24H2.iso - ❌ Not Verified</p>
+        </div>
+    </div>
+
+    <div class="os-section" onclick="toggleDetails('linux')">
+        <h2>Linux <span class="flag status-missing">🔴 Outdated</span></h2>
+        <button class="btn-check-updates" onclick="checkUpdates(event, 'linux')">Check for Updates</button>
+        <div id="linux" class="iso-details">
+            <p>Ubuntu_22.04.iso - ✅ Verified</p>
+            <p>Debian_11.iso - ⚠️ Unverifiable</p>
+        </div>
+    </div>
+
+    <div class="os-section" onclick="toggleDetails('macos')">
+        <h2>MacOS <span class="flag status-ok">🟢 Up-to-Date</span></h2>
+        <button class="btn-check-updates" onclick="checkUpdates(event, 'macos')">Check for Updates</button>
+        <div id="macos" class="iso-details">
+            <p>MacOS_15_Sequoia.img - ⚠️ Unverifiable</p>
+        </div>
+    </div>
+
+    <script>
+        function toggleDetails(id) {
+            const section = document.getElementById(id);
+            section.style.display = section.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function checkUpdates(event, os) {
+            event.stopPropagation(); // Prevent collapse toggle
+            alert('Checking for updates for ' + os + '...');
+            // Placeholder for actual update-checking logic
+        }
+    </script>
+</body>
+</html>

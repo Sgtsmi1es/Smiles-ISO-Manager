@@ -3,8 +3,18 @@ import shutil
 from datetime import datetime
 from flask import Flask, render_template_string, redirect, url_for
 
-# Environment variable for ISO directory
+# Environment variables
 ISO_DIR = os.getenv("ISO_DIR", "/mnt/user/isos")
+OS_FOLDERS = {
+    "Linux": ["linux", "ubuntu", "debian", "fedora", "centos", "arch", "kali"],
+    "MacOS": ["macos", "osx", "mac", "darwin"],
+    "Windows": ["windows", "win10", "win11", "win7", "win8"],
+    "Windows_Server": ["server", "windows_server"],
+    "pFSense": ["pfsense"],
+    "VBIOS": ["vbios", "gpu_bios"],
+    "Tools": ["tools", "drivers", "utilities", "install_tool"],
+    "Virtio": ["virtio", "vm_drivers"]
+}
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -58,7 +68,11 @@ def get_iso_files():
 # Home route to display the ISO files
 @app.route('/')
 def index():
-    return render_template_string(HTML_TEMPLATE, isos=get_iso_files())
+    from flask import render_template
+
+@app.route('/')
+def index():
+    return render_template('index.html', isos=get_iso_files())
 
 # Route to trigger ISO organization
 @app.route('/organize')
@@ -66,7 +80,7 @@ def organize():
     organize_isos()
     return redirect(url_for('index'))
 
-# Function to organize ISOs based on modification date and naming conventions
+# Function to organize ISOs based on folder mappings
 def organize_isos():
     for root, dirs, files in os.walk(ISO_DIR):
         for file in files:
@@ -74,14 +88,28 @@ def organize_isos():
                 src_path = os.path.join(root, file)
                 mod_time = datetime.fromtimestamp(os.path.getmtime(src_path)).strftime("%Y-%m-%d")
                 new_name = f"{mod_time}_{file.lower().replace(' ', '_')}"
-                dest_path = os.path.join(ISO_DIR, new_name)
+                dest_folder = determine_folder(file)
+                dest_path = os.path.join(ISO_DIR, dest_folder, new_name)
 
+                # Create destination folder if it doesn't exist
+                if not os.path.exists(os.path.join(ISO_DIR, dest_folder)):
+                    os.makedirs(os.path.join(ISO_DIR, dest_folder))
+
+                # Move the file
                 if src_path != dest_path:
                     if not os.path.exists(dest_path):
                         shutil.move(src_path, dest_path)
-                        print(f"Renamed: {src_path} -> {dest_path}")
+                        print(f"Moved: {src_path} -> {dest_path}")
                     else:
                         print(f"Duplicate found: {src_path} (already exists as {dest_path})")
+
+# Determine folder based on file name
+def determine_folder(filename):
+    filename_lower = filename.lower()
+    for folder, keywords in OS_FOLDERS.items():
+        if any(keyword in filename_lower for keyword in keywords):
+            return folder
+    return os.getenv("UNRECOGNIZED_FOLDER", "Unrecognized")  # Move unrecognized ISOs here
 
 # Run the Flask app on port 1337
 if __name__ == "__main__":
