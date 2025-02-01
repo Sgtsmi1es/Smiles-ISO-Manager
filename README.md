@@ -1,5 +1,5 @@
 # ISO Organizer Docker
-
+v0.0.2
 A lightweight Docker container to organize ISO files on Unraid with a simple web portal.
 
 ## 🚀 Features

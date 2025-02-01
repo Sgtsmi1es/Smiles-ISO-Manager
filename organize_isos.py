@@ -69,10 +69,6 @@ def get_iso_files():
 # Home route to display the ISO files
 @app.route('/')
 def index():
-    from flask import render_template
-
-@app.route('/')
-def index():
     return render_template('index.html', isos=get_iso_files())
 
 # Route to trigger ISO organization
@@ -112,6 +108,8 @@ def determine_folder(filename):
             return folder
     return os.getenv("UNRECOGNIZED_FOLDER", "Unrecognized")  # Move unrecognized ISOs here
 
-# Run the Flask app on port 1337
+# Get the port from environment variable or default to 1337
+PORT = int(os.getenv("PORT", 1337))
+
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=1337)
+    app.run(host='0.0.0.0', port=PORT)
